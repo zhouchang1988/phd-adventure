@@ -1,0 +1,641 @@
+/* ============================================
+   谢凡的奇幻冒险2.0 - 角色样式
+   ============================================ */
+
+/* 角色基础结构 */
+.character {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.character.visible {
+  opacity: 1;
+}
+
+/* 角色位置 */
+.character-left {
+  left: 15%;
+}
+
+.character-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.character-right {
+  right: 15%;
+}
+
+/* ============================================
+   主角：谢凡
+   ============================================ */
+.character-xiefan {
+  width: 120px;
+  height: 200px;
+}
+
+/* 头部 */
+.character-xiefan .head {
+  width: 60px;
+  height: 60px;
+  background: #f5d0a9;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* 头发 */
+.character-xiefan .head::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 5px;
+  width: 50px;
+  height: 30px;
+  background: #2d2d2d;
+  border-radius: 50% 50% 0 0;
+}
+
+/* 眼镜 */
+.character-xiefan .glasses {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 15px;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+}
+
+/* 身体 */
+.character-xiefan .body {
+  width: 80px;
+  height: 120px;
+  background: #3b82f6;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+}
+
+/* 衣领 */
+.character-xiefan .body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 15px;
+  background: #1e40af;
+  border-radius: 0 0 8px 8px;
+}
+
+/* 裤子 */
+.character-xiefan .pants {
+  width: 70px;
+  height: 40px;
+  background: #374151;
+  border-radius: 0 0 8px 8px;
+}
+
+/* 谢凡表情变体 */
+.character-xiefan.emotion-confused .head::after {
+  content: '?';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 20px;
+  color: #f59e0b;
+}
+
+.character-xiefan.emotion-thinking .head::after {
+  content: '...';
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  font-size: 16px;
+  color: #8b5cf6;
+}
+
+.character-xiefan.emotion-happy .mouth {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  border-bottom: 3px solid #2d2d2d;
+  border-radius: 0 0 10px 10px;
+}
+
+.character-xiefan.emotion-sad .mouth {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  border-top: 3px solid #2d2d2d;
+  border-radius: 10px 10px 0 0;
+}
+
+.character-xiefan.emotion-surprised .head::after {
+  content: '!';
+  position: absolute;
+  top: -20px;
+  right: -5px;
+  font-size: 20px;
+  color: #ef4444;
+}
+
+.character-xiefan.emotion-serious .eyes {
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 5px;
+  background: #2d2d2d;
+  border-radius: 2px;
+}
+
+/* ============================================
+   张教授
+   ============================================ */
+.character-zhang {
+  width: 130px;
+  height: 210px;
+}
+
+/* 头部 */
+.character-zhang .head {
+  width: 65px;
+  height: 65px;
+  background: #f5d0a9;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* 白发 */
+.character-zhang .head::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  width: 65px;
+  height: 35px;
+  background: #ffffff;
+  border-radius: 50% 50% 0 0;
+}
+
+/* 身体 */
+.character-zhang .body {
+  width: 90px;
+  height: 130px;
+  background: #f5f5f5;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+}
+
+/* 拖鞋 */
+.character-zhang .shoes {
+  width: 80px;
+  height: 15px;
+  background: #6b7280;
+  border-radius: 0 0 8px 8px;
+}
+
+/* 张教授表情变体 */
+.character-zhang.emotion-serious .eyes {
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 5px;
+  background: #2d2d2d;
+  border-radius: 2px;
+}
+
+.character-zhang.emotion-smile .mouth {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25px;
+  height: 12px;
+  border-bottom: 3px solid #2d2d2d;
+  border-radius: 0 0 12px 12px;
+}
+
+.character-zhang.emotion-nostalgic .head::after {
+  content: '~';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 20px;
+  color: #8b5cf6;
+}
+
+.character-zhang.emotion-interested .head::after {
+  content: '?';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 20px;
+  color: #3b82f6;
+}
+
+.character-zhang.emotion-deadpan .mouth {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25px;
+  height: 3px;
+  background: #2d2d2d;
+}
+
+/* ============================================
+   赵雪
+   ============================================ */
+.character-zhaoxue {
+  width: 110px;
+  height: 195px;
+}
+
+/* 头部 */
+.character-zhaoxue .head {
+  width: 55px;
+  height: 55px;
+  background: #f5d0a9;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* 马尾 */
+.character-zhaoxue .head::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -15px;
+  width: 40px;
+  height: 60px;
+  background: #1a1a1a;
+  border-radius: 20px;
+  transform: rotate(30deg);
+}
+
+/* 身体 */
+.character-zhaoxue .body {
+  width: 75px;
+  height: 120px;
+  background: #f5f5f5;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+}
+
+/* 内搭 */
+.character-zhaoxue .body::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 40px;
+  background: #6366f1;
+  border-radius: 4px;
+}
+
+/* 赵雪表情变体 */
+.character-zhaoxue.emotion-curious .head::after {
+  content: '?';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 18px;
+  color: #8b5cf6;
+}
+
+.character-zhaoxue.emotion-excited .head::after {
+  content: '!';
+  position: absolute;
+  top: -20px;
+  right: -5px;
+  font-size: 20px;
+  color: #f59e0b;
+}
+
+.character-zhaoxue.emotion-surprised .head::after {
+  content: '!!';
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  font-size: 16px;
+  color: #ef4444;
+}
+
+.character-zhaoxue.emotion-smile .mouth {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 9px;
+  border-bottom: 3px solid #2d2d2d;
+  border-radius: 0 0 9px 9px;
+}
+
+/* ============================================
+   林风
+   ============================================ */
+.character-linfeng {
+  width: 115px;
+  height: 205px;
+}
+
+/* 头部 */
+.character-linfeng .head {
+  width: 58px;
+  height: 58px;
+  background: #f5d0a9;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* 头发 */
+.character-linfeng .head::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 3px;
+  width: 52px;
+  height: 28px;
+  background: #1a1a1a;
+  border-radius: 50% 50% 0 0;
+}
+
+/* 身体 */
+.character-linfeng .body {
+  width: 82px;
+  height: 125px;
+  background: #6366f1;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+}
+
+/* 林风表情变体 */
+.character-linfeng.emotion-cool .eyes {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 4px;
+  background: #2d2d2d;
+  border-radius: 2px;
+}
+
+/* ============================================
+   守桥人
+   ============================================ */
+.character-bridgekeeper {
+  width: 140px;
+  height: 220px;
+}
+
+/* 头部 */
+.character-bridgekeeper .head {
+  width: 70px;
+  height: 70px;
+  background: #d4a574;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* 头饰 */
+.character-bridgekeeper .head::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 20px;
+  background: #f59e0b;
+  border-radius: 4px;
+}
+
+/* 身体 */
+.character-bridgekeeper .body {
+  width: 100px;
+  height: 140px;
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+  border-radius: 10px 10px 0 0;
+  position: relative;
+}
+
+/* 守桥人表情变体 */
+.character-bridgekeeper.emotion-serious .eyes {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35px;
+  height: 6px;
+  background: #2d2d2d;
+  border-radius: 3px;
+}
+
+.character-bridgekeeper.emotion-wise .head::after {
+  content: '...';
+  position: absolute;
+  top: -25px;
+  right: -15px;
+  font-size: 18px;
+  color: #f59e0b;
+}
+
+.character-bridgekeeper.emotion-gentle .mouth {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 14px;
+  border-bottom: 3px solid #2d2d2d;
+  border-radius: 0 0 14px 14px;
+}
+
+/* ============================================
+   平行谢凡
+   ============================================ */
+.character-parallel-xiefan {
+  width: 120px;
+  height: 200px;
+}
+
+/* 头部 */
+.character-parallel-xiefan .head {
+  width: 60px;
+  height: 60px;
+  background: #f5d0a9;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* 头发 */
+.character-parallel-xiefan .head::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 5px;
+  width: 50px;
+  height: 30px;
+  background: #2d2d2d;
+  border-radius: 50% 50% 0 0;
+}
+
+/* 身体 */
+.character-parallel-xiefan .body {
+  width: 80px;
+  height: 120px;
+  background: #f5f5f5;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+}
+
+/* 公文包 */
+.character-parallel-xiefan .briefcase {
+  position: absolute;
+  bottom: 20px;
+  right: -20px;
+  width: 40px;
+  height: 30px;
+  background: #8B7355;
+  border-radius: 4px;
+  border: 2px solid #6b7280;
+}
+
+/* 婚戒 */
+.character-parallel-xiefan .ring {
+  position: absolute;
+  bottom: 40px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  background: #f59e0b;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+}
+
+/* 平行谢凡表情变体 */
+.character-parallel-xiefan.emotion-calm .mouth {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: #2d2d2d;
+}
+
+.character-parallel-xiefan.emotion-nostalgic .head::after {
+  content: '~';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 20px;
+  color: #f59e0b;
+}
+
+/* ============================================
+   通用角色模板
+   ============================================ */
+.character-generic {
+  width: 100px;
+  height: 180px;
+}
+
+/* 头部 */
+.character-generic .head {
+  width: 50px;
+  height: 50px;
+  background: #f5d0a9;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* 身体 */
+.character-generic .body {
+  width: 70px;
+  height: 110px;
+  background: #6b7280;
+  border-radius: 10px 10px 0 0;
+}
+
+/* 角色颜色变体 */
+.character-generic.variant-blue .body { background: #3b82f6; }
+.character-generic.variant-green .body { background: #10b981; }
+.character-generic.variant-purple .body { background: #8b5cf6; }
+.character-generic.variant-red .body { background: #ef4444; }
+.character-generic.variant-yellow .body { background: #f59e0b; }
+.character-generic.variant-indigo .body { background: #6366f1; }
+.character-generic.variant-pink .body { background: #ec4899; }
+
+/* ============================================
+   角色动画
+   ============================================ */
+@keyframes character-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes character-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.character.entering {
+  animation: character-enter 0.3s ease-out forwards;
+}
+
+.character.exiting {
+  animation: character-exit 0.3s ease-in forwards;
+}
+
+/* 角色呼吸动画 */
+@keyframes character-breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.character.breathing {
+  animation: character-breathe 3s ease-in-out infinite;
+}
+
+/* 角色眨眼动画 */
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+.character .eyes {
+  animation: blink 4s ease-in-out infinite;
+}
