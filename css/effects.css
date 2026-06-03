@@ -6,7 +6,6 @@
    灵气效果
    ============================================ */
 
-/* 灵气波动 */
 @keyframes spiritual-energy {
   0% {
     box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
@@ -23,7 +22,6 @@
   animation: spiritual-energy 2s ease-in-out infinite;
 }
 
-/* 灵气漩涡 */
 @keyframes spiritual-vortex {
   0% {
     transform: rotate(0deg) scale(1);
@@ -49,7 +47,6 @@
   animation: spiritual-vortex 4s linear infinite;
 }
 
-/* 灵气粒子 */
 @keyframes spiritual-particle {
   0% {
     transform: translateY(0) scale(1);
@@ -74,14 +71,12 @@
    符文印记
    ============================================ */
 
-/* 符文印记 */
 .rune-mark {
   width: 60px;
   height: 60px;
   position: relative;
 }
 
-/* 符文主体 */
 .rune-mark::before {
   content: '';
   position: absolute;
@@ -96,7 +91,6 @@
   border-radius: 50%;
 }
 
-/* 符文光晕 */
 .rune-mark::after {
   content: '';
   position: absolute;
@@ -121,7 +115,6 @@
   }
 }
 
-/* 符文出现动画 */
 @keyframes rune-appear {
   0% {
     opacity: 0;
@@ -139,7 +132,6 @@
   animation: rune-appear 2s ease-out forwards;
 }
 
-/* 符文消失动画 */
 @keyframes rune-disappear {
   0% {
     opacity: 1;
@@ -161,7 +153,6 @@
    海浪效果
    ============================================ */
 
-/* 海浪 */
 @keyframes wave {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -182,7 +173,6 @@
   animation: wave 8s linear infinite;
 }
 
-/* 海浪波纹 */
 @keyframes ripple {
   0% {
     transform: scale(0);
@@ -203,7 +193,6 @@
   animation: ripple 2s ease-out infinite;
 }
 
-/* 海浪声音可视化 */
 @keyframes sound-wave {
   0% {
     transform: scaleY(0.3);
@@ -240,7 +229,6 @@
    石头温度效果
    ============================================ */
 
-/* 石头温度 */
 .stone {
   width: 40px;
   height: 35px;
@@ -249,14 +237,12 @@
   transition: all 0.5s ease;
 }
 
-/* 温暖状态 */
 .stone.warm {
   filter: brightness(1.1) saturate(1.2);
   box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
   background: linear-gradient(135deg, #6b7280 0%, #f59e0b 100%);
 }
 
-/* 温度变化动画 */
 @keyframes stone-warmth {
   0% {
     filter: brightness(1) saturate(1);
@@ -276,7 +262,6 @@
   animation: stone-warmth 5s ease-in-out;
 }
 
-/* 温度指示器 */
 .temperature-indicator {
   position: absolute;
   bottom: -20px;
@@ -296,7 +281,6 @@
    知识光芒效果
    ============================================ */
 
-/* 知识光芒 */
 @keyframes knowledge-flash {
   0% {
     opacity: 0;
@@ -321,7 +305,6 @@
   animation: knowledge-flash 0.5s ease-out;
 }
 
-/* 光线 */
 .knowledge-ray {
   position: absolute;
   width: 2px;
@@ -330,7 +313,6 @@
   transform-origin: bottom center;
 }
 
-/* 光线动画 */
 @keyframes ray-expand {
   0% {
     opacity: 0;
@@ -350,7 +332,6 @@
   animation: ray-expand 0.5s ease-out;
 }
 
-/* 多条光线 */
 .knowledge-rays {
   position: relative;
   width: 100px;
@@ -380,7 +361,6 @@
    屏幕特效
    ============================================ */
 
-/* 屏幕震动 */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-5px); }
@@ -391,7 +371,6 @@
   animation: shake 0.5s ease-in-out;
 }
 
-/* 屏幕闪光 */
 @keyframes flash {
   0% { opacity: 0; }
   50% { opacity: 0.3; }
@@ -409,7 +388,6 @@
   animation: flash 0.3s ease-out;
 }
 
-/* 淡入淡出 */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -428,7 +406,6 @@
   animation: fadeOut 0.5s ease-out;
 }
 
-/* 滑入滑出 */
 @keyframes slideIn {
   from {
     transform: translateY(20px);
@@ -463,7 +440,6 @@
    粒子效果
    ============================================ */
 
-/* 粒子容器 */
 .particles {
   position: absolute;
   top: 0;
@@ -474,7 +450,6 @@
   overflow: hidden;
 }
 
-/* 单个粒子 */
 .particle {
   position: absolute;
   width: 4px;
@@ -484,7 +459,6 @@
   opacity: 0;
 }
 
-/* 粒子飘动动画 */
 @keyframes particle-float {
   0% {
     opacity: 0;
@@ -508,14 +482,12 @@
   animation: particle-float 3s ease-out infinite;
 }
 
-/* 粒子颜色变体 */
 .particle.color-blue { background: #3b82f6; }
 .particle.color-green { background: #10b981; }
 .particle.color-purple { background: #8b5cf6; }
 .particle.color-yellow { background: #f59e0b; }
 .particle.color-red { background: #ef4444; }
 
-/* 粒子大小变体 */
 .particle.size-small { width: 2px; height: 2px; }
 .particle.size-medium { width: 4px; height: 4px; }
 .particle.size-large { width: 6px; height: 6px; }
@@ -524,7 +496,6 @@
    光环效果
    ============================================ */
 
-/* 光环 */
 @keyframes aura-pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
@@ -553,7 +524,6 @@
   animation: aura-pulse 2s ease-in-out infinite;
 }
 
-/* 光环颜色变体 */
 .aura.color-blue::after {
   box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
 }
@@ -574,7 +544,6 @@
    文字特效
    ============================================ */
 
-/* 文字发光 */
 @keyframes text-glow {
   0%, 100% {
     text-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
@@ -588,7 +557,6 @@
   animation: text-glow 2s ease-in-out infinite;
 }
 
-/* 文字渐变 */
 .text-gradient {
   background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981);
   -webkit-background-clip: text;
@@ -596,7 +564,6 @@
   background-clip: text;
 }
 
-/* 文字打字机效果 */
 @keyframes typewriter {
   from { width: 0; }
   to { width: 100%; }
@@ -608,7 +575,6 @@
   animation: typewriter 2s steps(40, end);
 }
 
-/* 文字闪烁 */
 @keyframes text-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
@@ -622,7 +588,6 @@
    进度条特效
    ============================================ */
 
-/* 进度条填充动画 */
 @keyframes progress-fill {
   from { width: 0; }
   to { width: var(--progress); }
@@ -632,7 +597,6 @@
   animation: progress-fill 1s ease-out;
 }
 
-/* 进度条发光 */
 @keyframes progress-glow {
   0%, 100% {
     box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
@@ -650,7 +614,6 @@
    背景特效
    ============================================ */
 
-/* 星空背景 */
 @keyframes starfield {
   0% { transform: translateY(0); }
   100% { transform: translateY(-100%); }
@@ -673,7 +636,6 @@
   animation: starfield 20s linear infinite;
 }
 
-/* 极光效果 */
 @keyframes aurora {
   0% {
     background-position: 0% 50%;
@@ -702,4 +664,154 @@
   background-size: 400% 400%;
   animation: aurora 10s ease infinite;
   filter: blur(30px);
+}
+
+/* ============================================
+   系统界面特效
+   ============================================ */
+
+@keyframes system-interface-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+.system-interface {
+  animation: system-interface-appear 0.5s ease-out;
+}
+
+.system-interface .stat-bar {
+  height: 8px;
+  background: #2a2a2a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.system-interface .stat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* ============================================
+   气旋效果
+   ============================================ */
+
+@keyframes vortex-form {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+.vortex {
+  width: 80px;
+  height: 80px;
+  background: 
+    radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, transparent 70%),
+    conic-gradient(from 0deg, transparent, rgba(139, 92, 246, 0.4), transparent);
+  border-radius: 50%;
+  animation: vortex-form 2s ease-out;
+}
+
+/* ============================================
+   全息公式效果
+   ============================================ */
+
+@keyframes hologram-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateY(-10px) rotate(2deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-5px) rotate(-1deg);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(-15px) rotate(1deg);
+    opacity: 0.9;
+  }
+}
+
+.hologram {
+  position: absolute;
+  color: #3b82f6;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 14px;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  animation: hologram-float 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ============================================
+   回忆闪回效果
+   ============================================ */
+
+@keyframes memory-flash {
+  0% {
+    opacity: 0;
+    filter: blur(10px) saturate(0);
+  }
+  30% {
+    opacity: 0.8;
+    filter: blur(2px) saturate(0.5);
+  }
+  70% {
+    opacity: 0.8;
+    filter: blur(2px) saturate(0.5);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(10px) saturate(0);
+  }
+}
+
+.memory-flash {
+  animation: memory-flash 2s ease-in-out;
+}
+
+/* ============================================
+   二周目开启特效
+   ============================================ */
+
+@keyframes new-game-plus {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+.new-game-plus {
+  animation: new-game-plus 1s ease-out;
 }

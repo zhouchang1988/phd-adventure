@@ -42,10 +42,8 @@ class GameEngine {
         this.dialogueQueue = [];
         this.currentDialogueIndex = 0;
         
-        // 打字机效果
         this.typewriterTimer = null;
-        
-        // 初始化
+        this.activeCharacters = {};
         this.init();
     }
 
@@ -220,10 +218,7 @@ class GameEngine {
             return;
         }
 
-        // 停止自动播放
         this.stopAutoPlay();
-        
-        // 停止打字机
         this.stopTypewriter();
 
         this.currentNode = node;
@@ -232,30 +227,30 @@ class GameEngine {
         this.currentDialogueIndex = 0;
         this.dialogueQueue = node.dialogues || [];
 
-        // 更新UI
         this.updateBackground(node.background);
         this.updateChapterIndicator(node.chapter, node.title);
+        this.updateSceneElements(nodeId);
         
-        // 应用特效
+        if (node.characters) {
+            this.hideAllCharacters();
+            node.characters.forEach(char => {
+                this.showCharacter(char.speaker, char.position, char.emotion);
+            });
+        }
+        
         if (node.effects) {
             this.applyEffects(node.effects);
         }
 
-        // 自动存档
         this.saveGame('auto');
-
-        // 确保对话框结构正确
         this.ensureDialogueStructure();
         
-        // 显示对话框，隐藏选项
         this.elements.dialogueBox.style.display = 'block';
         this.elements.choicesContainer.innerHTML = '';
 
-        // 开始渲染对话
         this.renderNextDialogue();
     }
 
-    // 确保对话框结构正确
     ensureDialogueStructure() {
         // 检查对话框内部结构是否完整
         if (!document.getElementById('speaker-name') || !document.getElementById('dialogue-text')) {
@@ -444,6 +439,7 @@ class GameEngine {
     updateBackground(bgId) {
         const bg = backgrounds[bgId];
         if (bg && this.elements.backgroundLayer) {
+            this.elements.backgroundLayer.className = 'scene scene-' + bgId.replace(/_/g, '-');
             this.elements.backgroundLayer.style.background = bg.gradient;
             this.elements.locationIndicator.textContent = bg.name;
         }
@@ -624,7 +620,75 @@ class GameEngine {
         }, 3000);
     }
 
-    // 渲染游戏
+    showCharacter(characterId, position, emotion) {
+        const characterData = characters[characterId];
+        if (!characterData) return;
+
+        const posMap = { 'left': 'character-left', 'center': 'character-center', 'right': 'character-right' };
+        const posClass = posMap[position] || 'character-center';
+        
+        this.hideAllCharacters();
+
+        const layer = this.elements.characterLayer;
+        if (!layer) return;
+
+        let charEl = document.createElement('div');
+        charEl.className = `character character-${characterData.id} ${posClass} visible`;
+        charEl.innerHTML = `
+            <div class="head">
+                <div class="eyes"></div>
+                <div class="mouth"></div>
+            </div>
+            <div class="body"></div>
+            <div class="pants"></div>
+        `;
+        
+        if (emotion) {
+            charEl.classList.add(`emotion-${emotion}`);
+        }
+
+        layer.appendChild(charEl);
+        this.activeCharacters[characterId] = charEl;
+    }
+
+    hideCharacter(characterId) {
+        if (this.activeCharacters[characterId]) {
+            this.activeCharacters[characterId].remove();
+            delete this.activeCharacters[characterId];
+        }
+    }
+
+    hideAllCharacters() {
+        Object.keys(this.activeCharacters).forEach(id => this.hideCharacter(id));
+    }
+
+    updateCharacterEmotion(characterId, emotion) {
+        const charEl = this.activeCharacters[characterId];
+        if (!charEl) return;
+
+        charEl.className = charEl.className.replace(/emotion-\w+/g, '');
+        if (emotion) {
+            charEl.classList.add(`emotion-${emotion}`);
+        }
+    }
+
+    updateSceneElements(nodeId) {
+        const layer = this.elements.effectsLayer;
+        if (!layer) return;
+        
+        layer.innerHTML = '';
+        
+        const node = storyNodes[nodeId];
+        if (!node || !node.sceneElements) return;
+
+        node.sceneElements.forEach(element => {
+            const el = document.createElement('div');
+            el.className = `scene-element ${element.class}`;
+            if (element.style) el.style.cssText = element.style;
+            layer.appendChild(el);
+        });
+    }
+
     render() {
         if (this.state.currentNode) {
             this.loadNode(this.state.currentNode);
