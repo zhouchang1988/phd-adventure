@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useGameEngine } from '@/hooks/useGameEngine';
 import { getStoryNode } from '@/lib/story';
-import { DialogueBox } from './DialogueBox';
-import { ChoicePanel } from './ChoicePanel';
-import { SceneBackground } from './SceneBackground';
+import { ChatContainer } from './ChatContainer';
 import { StatusBar } from './StatusBar';
 import { AttributePanel } from './AttributePanel';
 import { type Choice } from '@/types/game';
@@ -27,6 +25,7 @@ export function GameContainer() {
   const [showChoices, setShowChoices] = useState(false);
   const [isTyping, setIsTyping] = useState(true);
   const [showAttributes, setShowAttributes] = useState(false);
+  const autoPlayCallbackRef = useRef<(() => void) | null>(null);
 
   const currentNode = getStoryNode(state.currentNode);
 
@@ -49,12 +48,37 @@ export function GameContainer() {
     } else if (currentNode.autoNext) {
       const nextNode = getStoryNode(currentNode.autoNext);
       if (nextNode) {
-        startAutoPlay(currentNode.autoDelay || 2000, () => {
+        const callback = () => {
           loadNode(currentNode.autoNext!, nextNode);
-        });
+          autoPlayCallbackRef.current = null;
+        };
+        autoPlayCallbackRef.current = callback;
+        startAutoPlay(currentNode.autoDelay || 2000, callback);
       }
     }
   }, [currentNode, currentDialogueIndex, loadNode, startAutoPlay]);
+
+  const handleSkip = useCallback(() => {
+    if (autoPlayCallbackRef.current) {
+      autoPlayCallbackRef.current();
+    }
+    stopAutoPlay();
+  }, [stopAutoPlay]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (isAutoPlaying) {
+          handleSkip();
+        } else if (!showChoices) {
+          handleDialogueContinue();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showChoices, isAutoPlaying, handleDialogueContinue, handleSkip]);
 
   const handleTypingComplete = useCallback(() => {
     setIsTyping(false);
@@ -77,52 +101,49 @@ export function GameContainer() {
     return <div className="text-white">加载中...</div>;
   }
 
-  const currentDialogue = currentNode.dialogues[currentDialogueIndex];
-
   return (
-    <SceneBackground sceneId={currentNode.background} chapter={state.chapter}>
-      <StatusBar
-        chapter={state.chapter}
-        attributes={state.attributes}
-        onSave={handleSave}
-        onSettings={() => setShowAttributes(true)}
-      />
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="w-full max-w-[420px] h-screen flex flex-col bg-bg-primary relative">
+        <StatusBar
+          chapter={state.chapter}
+          attributes={state.attributes}
+          onSave={handleSave}
+          onSettings={() => setShowAttributes(true)}
+        />
 
-      <div className="flex flex-col justify-end h-full pb-8 px-4">
-        {!showChoices && currentDialogue && (
-          <DialogueBox
-            dialogue={currentDialogue}
-            chapter={state.chapter}
-            isTyping={isTyping}
-            onTypingComplete={handleTypingComplete}
-            onContinue={handleDialogueContinue}
-          />
-        )}
+        <div className="flex-1 pt-16 overflow-hidden flex flex-col">
+          <div className="flex-1 overflow-hidden">
+            <ChatContainer
+              dialogues={currentNode.dialogues}
+              currentDialogueIndex={currentDialogueIndex}
+              chapter={state.chapter}
+              choices={currentNode.choices}
+              showChoices={showChoices}
+              isTyping={isTyping}
+              onTypingComplete={handleTypingComplete}
+              onContinue={handleDialogueContinue}
+              onChoiceSelect={handleChoiceSelect}
+            />
+          </div>
 
-        {showChoices && currentNode.choices && (
-          <ChoicePanel
-            choices={currentNode.choices}
-            onSelect={handleChoiceSelect}
-          />
-        )}
-      </div>
-
-      {isAutoPlaying && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-          <button
-            onClick={stopAutoPlay}
-            className="text-text-secondary text-sm hover:text-text-primary"
-          >
-            点击跳过
-          </button>
+          {isAutoPlaying && (
+            <div className="flex justify-center py-3 bg-bg-primary/80">
+              <button
+                onClick={handleSkip}
+                className="text-text-secondary text-sm hover:text-text-primary bg-bg-card px-4 py-2 rounded-full"
+              >
+                点击跳过 / 按空格继续
+              </button>
+            </div>
+          )}
         </div>
-      )}
 
-      <AttributePanel
-        attributes={state.attributes}
-        isOpen={showAttributes}
-        onClose={() => setShowAttributes(false)}
-      />
-    </SceneBackground>
+        <AttributePanel
+          attributes={state.attributes}
+          isOpen={showAttributes}
+          onClose={() => setShowAttributes(false)}
+        />
+      </div>
+    </div>
   );
 }
