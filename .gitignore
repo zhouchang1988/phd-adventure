@@ -52,3 +52,9 @@ next-env.d.ts
 
 # code-review-graph
 .code-review-graph/
+
+# Playwright
+.playwright-mcp/
+
+# Screenshots
+screenshot-*.png
