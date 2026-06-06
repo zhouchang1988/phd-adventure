@@ -153,10 +153,10 @@ export const prologueNodes: Record<string, StoryNode> = {
         id: 'choice_hand_over',
         text: '【理性】把石头交给科研机构',
         style: 'rational',
-        nextNode: 'prologue_bad_end',
+        nextNode: 'prologue_5_institution',
         effects: {
           flags: { handed_over_stone: true },
-          achievements: ['good_citizen'],
+          attributes: { science: 2 },
         },
       },
       {
@@ -180,41 +180,173 @@ export const prologueNodes: Record<string, StoryNode> = {
       },
     ],
   },
-  prologue_bad_end: {
-    id: 'prologue_bad_end',
+  prologue_5_institution: {
+    id: 'prologue_5_institution',
     chapter: 'prologue',
-    title: 'BAD END 1：好公民',
-    background: 'beach_night',
+    title: '科研所之行',
+    background: 'dormitory_day',
     dialogues: [
       {
         speaker: 'narrator',
-        text: '第二天，你把石头送到了市科研所。',
+        text: '第二天一早，你带着石头来到了星海市科研所。',
       },
       {
         speaker: 'narrator',
-        text: '研究人员对石头进行了全面检测，结论是：一块普通的鹅卵石，表面涂了荧光粉。',
+        text: '前台是个戴眼镜的中年女人，看起来很专业。',
       },
       {
         speaker: 'xiefan',
-        text: '所以……是恶作剧？',
+        text: '你好，我捡到一块奇怪的石头，会发光，想交给你们检测。',
+      },
+      {
+        speaker: 'narrator',
+        text: '女人接过石头，看了一眼，表情突然变了。',
+      },
+      {
+        speaker: 'staff',
+        text: '你跟我来。',
+      },
+      {
+        speaker: 'narrator',
+        text: '她把你带进一间办公室，关上门。',
+      },
+      {
+        speaker: 'staff',
+        text: '这块石头……你是怎么得到的？',
+      },
+      {
+        speaker: 'xiefan',
+        text: '昨晚在海边捡的。怎么了？是危险物质吗？',
         emotion: 'confused',
       },
       {
         speaker: 'narrator',
-        text: '你继续投简历，继续被拒。三个月后，你找到了一份高中物理老师的工作。',
+        text: '女人盯着你看了很久，然后拿起电话。',
+      },
+      {
+        speaker: 'staff',
+        text: '张教授，您来一下。有个年轻人……对，就是那个。',
+      },
+    ],
+    autoNext: 'prologue_6_institution',
+    autoDelay: 2000,
+  },
+  prologue_6_institution: {
+    id: 'prologue_6_institution',
+    chapter: 'prologue',
+    title: '守夜人',
+    background: 'professor_home',
+    dialogues: [
+      {
+        speaker: 'narrator',
+        text: '门开了，进来的人让你吃了一惊。',
       },
       {
         speaker: 'narrator',
-        text: '平凡，但稳定。',
+        text: '是昨晚海边那个钓鱼的老人。',
       },
       {
-        speaker: 'system',
-        text: '【成就解锁：好公民】——做出了最安全的选择',
+        speaker: 'professor_zhang',
+        text: '又见面了，年轻人。',
       },
       {
-        speaker: 'system',
-        text: 'BAD END 1/5 —— 你错过了修仙的机会',
+        speaker: 'xiefan',
+        text: '你是……昨晚那个？',
+        emotion: 'surprised',
+      },
+      {
+        speaker: 'professor_zhang',
+        text: '我是这里的顾问。石头给我看看。',
+      },
+      {
+        speaker: 'narrator',
+        text: '老人接过石头，石头在他手里发出柔和的光。',
+      },
+      {
+        speaker: 'professor_zhang',
+        text: '果然是凝气石。你昨晚碰它的时候，有什么感觉？',
+      },
+      {
+        speaker: 'xiefan',
+        text: '感觉……手心发热？还有，我好像看到了一些奇怪的符号。',
+        emotion: 'thinking',
+      },
+      {
+        speaker: 'narrator',
+        text: '老人和那个女人对视一眼。',
+      },
+      {
+        speaker: 'professor_zhang',
+        text: '年轻人，你愿意参与一个……特殊的研究项目吗？',
       },
     ],
+    choices: [
+      {
+        id: 'choice_accept',
+        text: '什么研究项目？有工资吗？',
+        style: 'rational',
+        nextNode: 'prologue_7_institution',
+        effects: {
+          flags: { accepted_offer: true },
+        },
+      },
+      {
+        id: 'choice_refuse',
+        text: '我只想知道这石头是什么，不想参与什么项目',
+        style: 'casual',
+        nextNode: 'prologue_7_institution',
+        effects: {
+          flags: { refused_offer: true },
+        },
+      },
+    ],
+  },
+  prologue_7_institution: {
+    id: 'prologue_7_institution',
+    chapter: 'chapter1',
+    title: '新的开始',
+    background: 'professor_home',
+    dialogues: [
+      {
+        speaker: 'professor_zhang',
+        text: '石头我们会留下研究。但你的情况比较特殊——你已经和它产生了共鸣。',
+      },
+      {
+        speaker: 'xiefan',
+        text: '共鸣？什么意思？',
+        emotion: 'confused',
+      },
+      {
+        speaker: 'professor_zhang',
+        text: '意思是，即使石头被拿走，你体内的灵气种子已经发芽了。',
+      },
+      {
+        speaker: 'narrator',
+        text: '老人伸出手，在你面前画了个奇怪的符号。',
+      },
+      {
+        speaker: 'narrator',
+        text: '你看到空气中出现了一行发光的文字：',
+      },
+      {
+        speaker: 'system',
+        text: '【修仙系统 v2.0】\n宿主：谢凡\n境界：凡人（未入门）\n灵力：0/100\n状态：灵气种子已激活',
+      },
+      {
+        speaker: 'xiefan',
+        text: '这……这是什么？全息投影？',
+        emotion: 'surprised',
+      },
+      {
+        speaker: 'professor_zhang',
+        text: '这是修仙。欢迎加入守夜人，年轻人。',
+      },
+      {
+        speaker: 'narrator',
+        text: '你的人生，在这一刻彻底改变了。',
+      },
+    ],
+    autoNext: 'chapter1_3',
+    autoDelay: 3000,
   },
 };

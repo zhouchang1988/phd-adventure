@@ -62,6 +62,21 @@ export const characters: Record<string, Character> = {
       happy: '😄',
     },
   },
+  staff: {
+    id: 'staff',
+    name: '工作人员',
+    title: '科研所前台',
+    emoji: '👩‍🔬',
+    colors: {
+      hair: '#1a1a1a',
+      outfit: '#f5f5f5',
+    },
+    expressions: {
+      normal: '😐',
+      serious: '😑',
+      surprised: '😮',
+    },
+  },
   narrator: {
     id: 'narrator',
     name: '旁白',
