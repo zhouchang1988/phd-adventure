@@ -190,5 +190,7 @@ export const chapter1Nodes: Record<string, StoryNode> = {
         text: '【第一章完】\n下一章预告：你遇到了一个奇怪的老头，他说要收你为徒……',
       },
     ],
+    autoNext: 'chapter2_1',
+    autoDelay: 3000,
   },
 };
