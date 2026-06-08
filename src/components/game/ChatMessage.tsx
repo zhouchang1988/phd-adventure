@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useRef, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { tokens, type Chapter } from '@/lib/tokens';
 import { getCharacter } from '@/lib/characters';
@@ -10,8 +10,6 @@ interface ChatMessageProps {
   dialogue: Dialogue;
   chapter: Chapter;
   isLatest: boolean;
-  isTyping: boolean;
-  onTypingComplete?: () => void;
   onContinue?: () => void;
 }
 
@@ -19,83 +17,68 @@ export function ChatMessage({
   dialogue,
   chapter,
   isLatest,
-  isTyping,
-  onTypingComplete,
   onContinue,
 }: ChatMessageProps) {
-  const [displayedText, setDisplayedText] = useState('');
-  const [isComplete, setIsComplete] = useState(false);
   const character = getCharacter(dialogue.speaker);
   const chapterColor = tokens.chapters[chapter];
+  const onContinueRef = useRef(onContinue);
+  const isLatestRef = useRef(isLatest);
+  const handlerRef = useRef<((e: Event) => void) | null>(null);
+
+  onContinueRef.current = onContinue;
+  isLatestRef.current = isLatest;
+
+  const refCallback = useCallback((el: HTMLButtonElement | null) => {
+    if (handlerRef.current && el) {
+      el.removeEventListener('click', handlerRef.current);
+    }
+    if (!el) return;
+
+    const handler = () => {
+      if (isLatestRef.current && onContinueRef.current) {
+        onContinueRef.current();
+      }
+    };
+    handlerRef.current = handler;
+    el.addEventListener('click', handler);
+  }, []);
 
   const isNarrator = dialogue.speaker === 'narrator';
   const isSystem = dialogue.speaker === 'system';
   const isPlayer = dialogue.speaker === 'xiefan';
 
-  useEffect(() => {
-    if (!isTyping || !isLatest) {
-      setDisplayedText(dialogue.text);
-      setIsComplete(true);
-      return;
-    }
-
-    setDisplayedText('');
-    setIsComplete(false);
-    let index = 0;
-
-    const timer = setInterval(() => {
-      if (index < dialogue.text.length) {
-        setDisplayedText(dialogue.text.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(timer);
-        setIsComplete(true);
-        onTypingComplete?.();
-      }
-    }, 30);
-
-    return () => clearInterval(timer);
-  }, [dialogue.text, isTyping, isLatest, onTypingComplete]);
-
-  const handleClick = () => {
-    if (!isComplete) {
-      setDisplayedText(dialogue.text);
-      setIsComplete(true);
-      onTypingComplete?.();
-    } else if (isLatest) {
-      onContinue?.();
-    }
-  };
-
   if (isSystem) {
     return (
-      <div
-        className="flex justify-center my-6 cursor-pointer"
-        onClick={handleClick}
-      >
-        <div className={cn(
-          'px-5 py-2.5 rounded-full',
-          'bg-accent-info/15 text-accent-info',
-          'border border-accent-info/30',
-          'text-sm font-medium tracking-wide',
-          'animate-fadeIn'
-        )}>
-          {displayedText}
-          {isComplete && isLatest && (
+      <div className="flex justify-center my-6">
+        <button
+          ref={refCallback}
+          type="button"
+          className={cn(
+            'px-5 py-2.5 rounded-full cursor-pointer',
+            'bg-accent-info/15 text-accent-info',
+            'border border-accent-info/30',
+            'text-sm font-medium tracking-wide',
+            'animate-fadeIn'
+          )}
+        >
+          {dialogue.text}
+          {isLatest && (
             <span className="ml-2 opacity-50 animate-pulse">▼</span>
           )}
-        </div>
+        </button>
       </div>
     );
   }
 
   if (isNarrator) {
     return (
-      <div
+      <button
+        ref={refCallback}
+        type="button"
         className={cn(
-          'my-6 mx-4 cursor-pointer animate-fadeIn'
+          'my-6 mx-4 cursor-pointer animate-fadeIn',
+          'block w-[calc(100%-3rem)] text-left'
         )}
-        onClick={handleClick}
       >
         <div className={cn(
           'relative px-5 py-4 rounded-lg',
@@ -107,25 +90,26 @@ export function ChatMessage({
             style={{ backgroundColor: chapterColor }}
           />
           <p className="leading-relaxed text-[#c8d6e5] pl-2 text-[15px]">
-            {displayedText}
+            {dialogue.text}
           </p>
-          {isComplete && isLatest && (
+          {isLatest && (
             <div className="text-right mt-2">
               <span className="text-[#4a5568] text-xs animate-pulse">▼ 点击继续</span>
             </div>
           )}
         </div>
-      </div>
+      </button>
     );
   }
 
   return (
-    <div
+    <button
+      ref={refCallback}
+      type="button"
       className={cn(
-        'flex gap-2.5 my-4 px-4 cursor-pointer animate-fadeIn',
+        'flex gap-2.5 my-4 px-4 cursor-pointer animate-fadeIn w-full text-left',
         isPlayer ? 'flex-row-reverse' : 'flex-row'
       )}
-      onClick={handleClick}
     >
       <div
         className={cn(
@@ -161,10 +145,10 @@ export function ChatMessage({
         </div>
 
         <p className="leading-relaxed text-[15px]">
-          {displayedText}
+          {dialogue.text}
         </p>
 
-        {isComplete && isLatest && (
+        {isLatest && (
           <div className={cn(
             'mt-1.5',
             isPlayer ? 'text-right' : 'text-left'
@@ -173,6 +157,6 @@ export function ChatMessage({
           </div>
         )}
       </div>
-    </div>
+    </button>
   );
 }

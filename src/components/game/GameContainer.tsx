@@ -17,46 +17,46 @@ export function GameContainer() {
     startAutoPlay,
     stopAutoPlay,
     saveGame,
-    loadGame,
-    restart,
   } = useGameEngine();
 
   const [currentDialogueIndex, setCurrentDialogueIndex] = useState(0);
   const [showChoices, setShowChoices] = useState(false);
-  const [isTyping, setIsTyping] = useState(true);
   const [showAttributes, setShowAttributes] = useState(false);
   const autoPlayCallbackRef = useRef<(() => void) | null>(null);
+  const dialogueIndexRef = useRef(0);
+  const stateRef = useRef(state);
 
   const currentNode = getStoryNode(state.currentNode);
+  dialogueIndexRef.current = currentDialogueIndex;
+  stateRef.current = state;
 
   useEffect(() => {
     setCurrentDialogueIndex(0);
     setShowChoices(false);
-    setIsTyping(true);
   }, [state.currentNode]);
 
   const handleDialogueContinue = useCallback(() => {
-    if (!currentNode) return;
+    const node = getStoryNode(stateRef.current.currentNode);
+    if (!node) return;
 
-    const nextIndex = currentDialogueIndex + 1;
+    const nextIndex = dialogueIndexRef.current + 1;
 
-    if (nextIndex < currentNode.dialogues.length) {
+    if (nextIndex < node.dialogues.length) {
       setCurrentDialogueIndex(nextIndex);
-      setIsTyping(true);
-    } else if (currentNode.choices) {
+    } else if (node.choices) {
       setShowChoices(true);
-    } else if (currentNode.autoNext) {
-      const nextNode = getStoryNode(currentNode.autoNext);
+    } else if (node.autoNext) {
+      const nextNode = getStoryNode(node.autoNext);
       if (nextNode) {
         const callback = () => {
-          loadNode(currentNode.autoNext!, nextNode);
+          loadNode(node.autoNext!, nextNode);
           autoPlayCallbackRef.current = null;
         };
         autoPlayCallbackRef.current = callback;
-        startAutoPlay(currentNode.autoDelay || 2000, callback);
+        startAutoPlay(node.autoDelay || 2000, callback);
       }
     }
-  }, [currentNode, currentDialogueIndex, loadNode, startAutoPlay]);
+  }, [loadNode, startAutoPlay]);
 
   const handleSkip = useCallback(() => {
     if (autoPlayCallbackRef.current) {
@@ -69,20 +69,17 @@ export function GameContainer() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         e.preventDefault();
-        if (isAutoPlaying) {
-          handleSkip();
-        } else if (!showChoices) {
+        if (autoPlayCallbackRef.current) {
+          autoPlayCallbackRef.current();
+          stopAutoPlay();
+        } else {
           handleDialogueContinue();
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showChoices, isAutoPlaying, handleDialogueContinue, handleSkip]);
-
-  const handleTypingComplete = useCallback(() => {
-    setIsTyping(false);
-  }, []);
+  }, [handleDialogueContinue, stopAutoPlay]);
 
   const handleChoiceSelect = useCallback((choice: Choice) => {
     makeChoice(choice);
@@ -119,8 +116,6 @@ export function GameContainer() {
               chapter={state.chapter}
               choices={currentNode.choices}
               showChoices={showChoices}
-              isTyping={isTyping}
-              onTypingComplete={handleTypingComplete}
               onContinue={handleDialogueContinue}
               onChoiceSelect={handleChoiceSelect}
             />
