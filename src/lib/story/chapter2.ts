@@ -256,5 +256,7 @@ export const chapter2Nodes: Record<string, StoryNode> = {
         text: '【第二章完】\n下一章预告：你将遇到第一个真正的敌人，一个来自异界的怪物……',
       },
     ],
+    autoNext: 'chapter3_1',
+    autoDelay: 3000,
   },
 };
