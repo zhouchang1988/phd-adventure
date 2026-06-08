@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { type GameState, type StoryNode, type Choice, type Attributes } from '@/types/game';
-import { type Chapter } from '@/lib/tokens';
+import { type Chapter, CHAPTER_ORDER } from '@/lib/tokens';
+import { getStoryNode } from '@/lib/story';
 import { useSaveSystem } from './useSaveSystem';
 
 const INITIAL_STATE: GameState = {
@@ -19,6 +20,7 @@ const INITIAL_STATE: GameState = {
   flags: {},
   achievements: [],
   playTime: 0,
+  visitedChapters: ['prologue'],
 };
 
 export function useGameEngine() {
@@ -26,7 +28,24 @@ export function useGameEngine() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
   const playTimeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const { save, load } = useSaveSystem();
+
+  // 自动存档：状态变化时保存到localStorage（防抖500ms）
+  useEffect(() => {
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+    }
+    saveTimerRef.current = setTimeout(() => {
+      save(state, 'auto');
+    }, 500);
+
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+      }
+    };
+  }, [state, save]);
 
   useEffect(() => {
     playTimeTimerRef.current = setInterval(() => {
@@ -41,11 +60,26 @@ export function useGameEngine() {
   }, []);
 
   const loadNode = useCallback((nodeId: string, node: StoryNode) => {
-    setState(prev => ({
-      ...prev,
-      currentNode: nodeId,
-      chapter: node.chapter,
-    }));
+    setState(prev => {
+      if (prev.visitedChapters.includes(node.chapter)) {
+        return {
+          ...prev,
+          currentNode: nodeId,
+          chapter: node.chapter,
+        };
+      }
+
+      const chapterIndex = CHAPTER_ORDER.indexOf(node.chapter);
+      const allPreviousChapters = CHAPTER_ORDER.slice(0, chapterIndex + 1);
+      const visitedChapters = [...new Set([...prev.visitedChapters, ...allPreviousChapters])];
+      
+      return {
+        ...prev,
+        currentNode: nodeId,
+        chapter: node.chapter,
+        visitedChapters,
+      };
+    });
   }, []);
 
   const makeChoice = useCallback((choice: Choice) => {
@@ -101,14 +135,35 @@ export function useGameEngine() {
     setIsAutoPlaying(false);
   }, []);
 
-  const saveGame = useCallback((slot: string = 'auto') => {
-    save(state, slot);
-  }, [state, save]);
+  const jumpToChapter = useCallback((chapter: Chapter) => {
+    const nodeId = `${chapter}_1`;
+    const node = getStoryNode(nodeId);
+    if (node) {
+      setState(prev => ({
+        ...prev,
+        currentNode: nodeId,
+        chapter: chapter,
+      }));
+    }
+  }, []);
 
   const loadGame = useCallback((slot: string = 'auto') => {
     const loadedState = load(slot);
     if (loadedState) {
-      setState(loadedState);
+      const currentChapter = loadedState.chapter || 'prologue';
+      const chapterIndex = CHAPTER_ORDER.indexOf(currentChapter);
+      const allPreviousChapters = CHAPTER_ORDER.slice(0, chapterIndex + 1);
+      
+      const visitedChapters = loadedState.visitedChapters 
+        ? [...new Set([...loadedState.visitedChapters, ...allPreviousChapters])]
+        : allPreviousChapters;
+
+      const stateWithDefaults = {
+        ...INITIAL_STATE,
+        ...loadedState,
+        visitedChapters,
+      };
+      setState(stateWithDefaults);
       return true;
     }
     return false;
@@ -125,8 +180,8 @@ export function useGameEngine() {
     makeChoice,
     startAutoPlay,
     stopAutoPlay,
-    saveGame,
     loadGame,
+    jumpToChapter,
     restart,
   };
 }

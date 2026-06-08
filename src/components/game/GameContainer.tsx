@@ -5,7 +5,7 @@ import { useGameEngine } from '@/hooks/useGameEngine';
 import { getStoryNode } from '@/lib/story';
 import { ChatContainer } from './ChatContainer';
 import { StatusBar } from './StatusBar';
-import { AttributePanel } from './AttributePanel';
+import { ChapterList } from './ChapterList';
 import { type Choice } from '@/types/game';
 
 export function GameContainer() {
@@ -16,15 +16,21 @@ export function GameContainer() {
     makeChoice,
     startAutoPlay,
     stopAutoPlay,
-    saveGame,
+    loadGame,
+    jumpToChapter,
   } = useGameEngine();
 
   const [currentDialogueIndex, setCurrentDialogueIndex] = useState(0);
   const [showChoices, setShowChoices] = useState(false);
-  const [showAttributes, setShowAttributes] = useState(false);
+  const [showChapterList, setShowChapterList] = useState(false);
   const autoPlayCallbackRef = useRef<(() => void) | null>(null);
   const dialogueIndexRef = useRef(0);
   const stateRef = useRef(state);
+
+  // 页面加载时自动加载存档
+  useEffect(() => {
+    loadGame('auto');
+  }, [loadGame]);
 
   const currentNode = getStoryNode(state.currentNode);
   dialogueIndexRef.current = currentDialogueIndex;
@@ -89,10 +95,7 @@ export function GameContainer() {
     }
   }, [makeChoice, loadNode]);
 
-  const handleSave = useCallback(() => {
-    saveGame();
-    alert('存档成功！');
-  }, [saveGame]);
+
 
   if (!currentNode) {
     return <div className="text-white">加载中...</div>;
@@ -104,8 +107,7 @@ export function GameContainer() {
         <StatusBar
           chapter={state.chapter}
           attributes={state.attributes}
-          onSave={handleSave}
-          onSettings={() => setShowAttributes(true)}
+          onChapterClick={() => setShowChapterList(true)}
         />
 
         <div className="flex-1 pt-16 overflow-hidden flex flex-col">
@@ -116,6 +118,7 @@ export function GameContainer() {
               chapter={state.chapter}
               choices={currentNode.choices}
               showChoices={showChoices}
+              isAutoPlaying={isAutoPlaying}
               onContinue={handleDialogueContinue}
               onChoiceSelect={handleChoiceSelect}
             />
@@ -133,11 +136,14 @@ export function GameContainer() {
           )}
         </div>
 
-        <AttributePanel
-          attributes={state.attributes}
-          isOpen={showAttributes}
-          onClose={() => setShowAttributes(false)}
+        <ChapterList
+          isOpen={showChapterList}
+          onClose={() => setShowChapterList(false)}
+          visitedChapters={state.visitedChapters}
+          currentChapter={state.chapter}
+          onChapterSelect={jumpToChapter}
         />
+
       </div>
     </div>
   );

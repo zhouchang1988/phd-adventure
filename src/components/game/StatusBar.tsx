@@ -7,8 +7,7 @@ import { type Attributes } from '@/types/game';
 interface StatusBarProps {
   chapter: Chapter;
   attributes: Attributes;
-  onSave?: () => void;
-  onSettings?: () => void;
+  onChapterClick?: () => void;
 }
 
 function getChapterName(chapter: Chapter): string {
@@ -24,13 +23,16 @@ function getChapterName(chapter: Chapter): string {
   return names[chapter] || '';
 }
 
-export function StatusBar({ chapter, attributes, onSave, onSettings }: StatusBarProps) {
+export function StatusBar({ chapter, attributes, onChapterClick }: StatusBarProps) {
   const chapterColor = tokens.chapters[chapter];
 
   return (
     <div className="absolute top-0 left-0 right-0 z-20">
       <div className="flex items-center justify-between px-6 py-3 bg-bg-primary/80 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
+        <button
+          onClick={onChapterClick}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+        >
           <div
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: chapterColor }}
@@ -38,22 +40,7 @@ export function StatusBar({ chapter, attributes, onSave, onSettings }: StatusBar
           <span className="text-text-secondary text-sm">
             {getChapterName(chapter)}
           </span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <button
-            onClick={onSave}
-            className="text-text-secondary hover:text-text-primary transition-colors"
-          >
-            💾
-          </button>
-          <button
-            onClick={onSettings}
-            className="text-text-secondary hover:text-text-primary transition-colors"
-          >
-            ⚙️
-          </button>
-        </div>
+        </button>
       </div>
     </div>
   );

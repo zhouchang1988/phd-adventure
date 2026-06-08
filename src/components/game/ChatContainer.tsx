@@ -12,6 +12,7 @@ interface ChatContainerProps {
   chapter: Chapter;
   choices?: Choice[];
   showChoices: boolean;
+  isAutoPlaying: boolean;
   onContinue: () => void;
   onChoiceSelect: (choice: Choice) => void;
 }
@@ -22,6 +23,7 @@ export function ChatContainer({
   chapter,
   choices,
   showChoices,
+  isAutoPlaying,
   onContinue,
   onChoiceSelect,
 }: ChatContainerProps) {
@@ -29,7 +31,7 @@ export function ChatContainer({
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [currentDialogueIndex, showChoices]);
+  }, [currentDialogueIndex, showChoices, isAutoPlaying]);
 
   const visibleDialogues = dialogues.slice(0, currentDialogueIndex + 1);
 

@@ -8,6 +8,7 @@ export interface GameState {
   flags: Record<string, boolean>;
   achievements: string[];
   playTime: number;
+  visitedChapters: Chapter[];
 }
 
 export interface Attributes {

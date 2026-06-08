@@ -82,3 +82,14 @@ export const tokens = {
 export type Tokens = typeof tokens;
 export type Chapter = keyof typeof tokens.chapters;
 export type ChoiceStyle = keyof typeof tokens.choices;
+
+// 章节顺序（从前往后）
+export const CHAPTER_ORDER: Chapter[] = [
+  'prologue',
+  'chapter1',
+  'chapter2',
+  'chapter3',
+  'chapter4',
+  'chapter5',
+  'epilogue',
+];

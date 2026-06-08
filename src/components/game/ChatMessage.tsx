@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { tokens, type Chapter } from '@/lib/tokens';
 import { getCharacter } from '@/lib/characters';
@@ -21,27 +21,12 @@ export function ChatMessage({
 }: ChatMessageProps) {
   const character = getCharacter(dialogue.speaker);
   const chapterColor = tokens.chapters[chapter];
-  const onContinueRef = useRef(onContinue);
-  const isLatestRef = useRef(isLatest);
-  const handlerRef = useRef<((e: Event) => void) | null>(null);
 
-  onContinueRef.current = onContinue;
-  isLatestRef.current = isLatest;
-
-  const refCallback = useCallback((el: HTMLButtonElement | null) => {
-    if (handlerRef.current && el) {
-      el.removeEventListener('click', handlerRef.current);
+  const handleClick = useCallback(() => {
+    if (isLatest && onContinue) {
+      onContinue();
     }
-    if (!el) return;
-
-    const handler = () => {
-      if (isLatestRef.current && onContinueRef.current) {
-        onContinueRef.current();
-      }
-    };
-    handlerRef.current = handler;
-    el.addEventListener('click', handler);
-  }, []);
+  }, [isLatest, onContinue]);
 
   const isNarrator = dialogue.speaker === 'narrator';
   const isSystem = dialogue.speaker === 'system';
@@ -51,7 +36,7 @@ export function ChatMessage({
     return (
       <div className="flex justify-center my-6">
         <button
-          ref={refCallback}
+          onClick={handleClick}
           type="button"
           className={cn(
             'px-5 py-2.5 rounded-full cursor-pointer',
@@ -73,7 +58,7 @@ export function ChatMessage({
   if (isNarrator) {
     return (
       <button
-        ref={refCallback}
+        onClick={handleClick}
         type="button"
         className={cn(
           'my-6 mx-4 cursor-pointer animate-fadeIn',
@@ -104,7 +89,7 @@ export function ChatMessage({
 
   return (
     <button
-      ref={refCallback}
+      onClick={handleClick}
       type="button"
       className={cn(
         'flex gap-2.5 my-4 px-4 cursor-pointer animate-fadeIn w-full text-left',

@@ -1,4 +1,4 @@
-import { tokens, type Chapter, type ChoiceStyle } from './tokens';
+import { tokens, type Chapter, type ChoiceStyle, CHAPTER_ORDER } from './tokens';
 
 describe('tokens', () => {
   describe('background', () => {
@@ -198,6 +198,26 @@ describe('tokens', () => {
       styles.forEach((style) => {
         expect(tokens.choices[style]).toBeDefined();
       });
+    });
+  });
+
+  describe('CHAPTER_ORDER', () => {
+    it('应该包含所有章节', () => {
+      expect(CHAPTER_ORDER).toHaveLength(7);
+      expect(CHAPTER_ORDER).toEqual([
+        'prologue',
+        'chapter1',
+        'chapter2',
+        'chapter3',
+        'chapter4',
+        'chapter5',
+        'epilogue',
+      ]);
+    });
+
+    it('应该按正确顺序排列', () => {
+      expect(CHAPTER_ORDER[0]).toBe('prologue');
+      expect(CHAPTER_ORDER[6]).toBe('epilogue');
     });
   });
 });
