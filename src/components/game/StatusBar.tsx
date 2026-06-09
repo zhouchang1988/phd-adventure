@@ -8,6 +8,7 @@ interface StatusBarProps {
   chapter: Chapter;
   attributes: Attributes;
   onChapterClick?: () => void;
+  onRestart?: () => void;
 }
 
 function getChapterName(chapter: Chapter): string {
@@ -23,7 +24,7 @@ function getChapterName(chapter: Chapter): string {
   return names[chapter] || '';
 }
 
-export function StatusBar({ chapter, attributes, onChapterClick }: StatusBarProps) {
+export function StatusBar({ chapter, attributes, onChapterClick, onRestart }: StatusBarProps) {
   const chapterColor = tokens.chapters[chapter];
 
   return (
@@ -40,6 +41,13 @@ export function StatusBar({ chapter, attributes, onChapterClick }: StatusBarProp
           <span className="text-text-secondary text-sm">
             {getChapterName(chapter)}
           </span>
+        </button>
+
+        <button
+          onClick={onRestart}
+          className="text-text-secondary hover:text-text-primary text-sm transition-colors"
+        >
+          重生
         </button>
       </div>
     </div>

@@ -18,6 +18,7 @@ export function GameContainer() {
     stopAutoPlay,
     loadGame,
     jumpToChapter,
+    restart,
   } = useGameEngine();
 
   const [currentDialogueIndex, setCurrentDialogueIndex] = useState(0);
@@ -95,6 +96,12 @@ export function GameContainer() {
     }
   }, [makeChoice, loadNode]);
 
+  const handleRestart = useCallback(() => {
+    if (confirm('确定要重生吗？这将回到游戏开始。')) {
+      restart();
+    }
+  }, [restart]);
+
 
 
   if (!currentNode) {
@@ -108,6 +115,7 @@ export function GameContainer() {
           chapter={state.chapter}
           attributes={state.attributes}
           onChapterClick={() => setShowChapterList(true)}
+          onRestart={handleRestart}
         />
 
         <div className="flex-1 pt-16 overflow-hidden flex flex-col">
