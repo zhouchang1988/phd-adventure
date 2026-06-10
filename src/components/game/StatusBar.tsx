@@ -46,8 +46,9 @@ export function StatusBar({ chapter, attributes, onChapterClick, onRestart }: St
         <button
           onClick={onRestart}
           className="text-text-secondary hover:text-text-primary text-sm transition-colors"
+          title="重生"
         >
-          重生
+          🔄
         </button>
       </div>
     </div>
