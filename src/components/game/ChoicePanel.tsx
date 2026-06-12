@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { tokens } from '@/lib/tokens';
 import { type Choice } from '@/types/game';
@@ -18,6 +19,16 @@ const styleIcons: Record<string, string> = {
 };
 
 export function ChoicePanel({ choices, onSelect, disabled = false }: ChoicePanelProps) {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const handleSelect = useCallback((choice: Choice) => {
+    setSelectedId(choice.id);
+    setTimeout(() => {
+      setSelectedId(null);
+      onSelect(choice);
+    }, 500);
+  }, [onSelect]);
+
   return (
     <div className="w-full space-y-2.5">
       <div className="text-center mb-3">
@@ -26,23 +37,25 @@ export function ChoicePanel({ choices, onSelect, disabled = false }: ChoicePanel
       {choices.map((choice, index) => {
         const styleColor = tokens.choices[choice.style];
         const icon = styleIcons[choice.style] || '▸';
+        const isSelected = selectedId === choice.id;
 
         return (
           <button
             key={choice.id}
-            onClick={() => onSelect(choice)}
-            disabled={disabled}
+            onClick={() => handleSelect(choice)}
+            disabled={disabled || selectedId !== null}
             className={cn(
               'w-full text-left',
-              'bg-[#0f1f3d] hover:bg-[#162544]',
               'rounded-xl px-5 py-3.5',
-              'border border-[#1e3354] hover:border-[#2a4a70]',
               'transition-all duration-200',
               'hover:scale-[1.01] hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]',
               'active:scale-[0.99]',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               'group',
-              'animate-slideUp'
+              'animate-slideUp',
+              isSelected 
+                ? 'bg-[#1e3a5f] border-2 border-[#4a90d9] shadow-[0_0_20px_rgba(74,144,217,0.3)]'
+                : 'bg-[#0f1f3d] hover:bg-[#162544] border border-[#1e3354] hover:border-[#2a4a70]'
             )}
             style={{
               animationDelay: `${index * 80}ms`,
@@ -55,7 +68,10 @@ export function ChoicePanel({ choices, onSelect, disabled = false }: ChoicePanel
               >
                 {icon}
               </span>
-              <span className="text-[#c8d6e5] group-hover:text-white transition-colors text-[15px]">
+              <span className={cn(
+                'transition-colors text-[15px]',
+                isSelected ? 'text-white' : 'text-[#c8d6e5] group-hover:text-white'
+              )}>
                 {choice.text}
               </span>
             </div>
