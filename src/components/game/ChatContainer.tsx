@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { type Chapter } from '@/lib/tokens';
 import { type Dialogue, type Choice } from '@/types/game';
 import { ChatMessage } from './ChatMessage';
@@ -29,6 +29,12 @@ export function ChatContainer({
 }: ChatContainerProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const handleClick = useCallback(() => {
+    if (!showChoices) {
+      onContinue();
+    }
+  }, [showChoices, onContinue]);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [currentDialogueIndex, showChoices, isAutoPlaying]);
@@ -37,14 +43,16 @@ export function ChatContainer({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+      <div 
+        className="flex-1 overflow-y-auto px-4 py-6 space-y-4 cursor-pointer"
+        onClick={handleClick}
+      >
         {visibleDialogues.map((dialogue, index) => (
           <ChatMessage
             key={index}
             dialogue={dialogue}
             chapter={chapter}
             isLatest={index === currentDialogueIndex}
-            onContinue={onContinue}
           />
         ))}
         <div ref={messagesEndRef} />

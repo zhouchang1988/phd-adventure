@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { } from 'react';
 import { cn } from '@/lib/utils';
 import { tokens, type Chapter } from '@/lib/tokens';
 import { getCharacter } from '@/lib/characters';
@@ -10,23 +10,15 @@ interface ChatMessageProps {
   dialogue: Dialogue;
   chapter: Chapter;
   isLatest: boolean;
-  onContinue?: () => void;
 }
 
 export function ChatMessage({
   dialogue,
   chapter,
   isLatest,
-  onContinue,
 }: ChatMessageProps) {
   const character = getCharacter(dialogue.speaker);
   const chapterColor = tokens.chapters[chapter];
-
-  const handleClick = useCallback(() => {
-    if (isLatest && onContinue) {
-      onContinue();
-    }
-  }, [isLatest, onContinue]);
 
   const isNarrator = dialogue.speaker === 'narrator';
   const isSystem = dialogue.speaker === 'system';
@@ -35,11 +27,9 @@ export function ChatMessage({
   if (isSystem) {
     return (
       <div className="flex justify-center my-6">
-        <button
-          onClick={handleClick}
-          type="button"
+        <div
           className={cn(
-            'px-5 py-2.5 rounded-full cursor-pointer',
+            'px-5 py-2.5 rounded-full',
             'bg-accent-info/15 text-accent-info',
             'border border-accent-info/30',
             'text-sm font-medium tracking-wide',
@@ -50,18 +40,16 @@ export function ChatMessage({
           {isLatest && (
             <span className="ml-2 opacity-50 animate-pulse">▼</span>
           )}
-        </button>
+        </div>
       </div>
     );
   }
 
   if (isNarrator) {
     return (
-      <button
-        onClick={handleClick}
-        type="button"
+      <div
         className={cn(
-          'my-6 mx-4 cursor-pointer animate-fadeIn',
+          'my-6 mx-4 animate-fadeIn',
           'block w-[calc(100%-3rem)] text-left'
         )}
       >
@@ -83,16 +71,14 @@ export function ChatMessage({
             </div>
           )}
         </div>
-      </button>
+      </div>
     );
   }
 
   return (
-    <button
-      onClick={handleClick}
-      type="button"
+    <div
       className={cn(
-        'flex gap-2.5 my-4 px-4 cursor-pointer animate-fadeIn w-full text-left',
+        'flex gap-2.5 my-4 px-4 animate-fadeIn w-full text-left',
         isPlayer ? 'flex-row-reverse' : 'flex-row'
       )}
     >
@@ -142,6 +128,6 @@ export function ChatMessage({
           </div>
         )}
       </div>
-    </button>
+    </div>
   );
 }
